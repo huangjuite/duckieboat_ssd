@@ -1,0 +1,9 @@
+.vscode/
+images/
+pre-trained-model/
+*.csv
+*.record
+model.*
+events.out.tfevents*
+pre-trained-model/
+trained-inference-graphs/
