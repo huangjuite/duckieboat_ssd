@@ -31,6 +31,7 @@ def main():
         args.percentage = 0.2
     
     assert(os.path.isdir(args.inputDir))
+    args.inputDir += '/'
     #-----------------------------------------------------------
     #-----------------------------------------------------------
     files = glob.glob(args.inputDir + 'annotation/*.xml')
@@ -48,11 +49,11 @@ def main():
     except:
         print 'test folder already esxist'
     for xml_file in test_xmls:
-        num = re.findall(r'\d+',xml_file)[-1]
-        jpg_file = args.inputDir + 'image/frame'+num+'.jpg'
-
-        move(xml_file,args.inputDir + 'test/frame'+num+'.xml')
-        move(jpg_file,args.inputDir + 'test/frame'+num+'.jpg')
+        name = os.path.splitext(os.path.basename(xml_file))
+        jpg_file = args.inputDir + 'image/' +name[0]+'.jpg'
+        print jpg_file
+        move(xml_file,args.inputDir + 'test/'+name[0]+name[1])
+        move(jpg_file,args.inputDir + 'test/'+name[0]+'.jpg')
     #-----------------------------------------------------------
     #-----------------------------------------------------------
     try:
@@ -60,11 +61,11 @@ def main():
     except:
         print 'train folder already esxist'
     for xml_file in train_xmls:
-        num = re.findall(r'\d+',xml_file)[-1]
-        jpg_file = args.inputDir + 'image/frame'+num+'.jpg'
+        name = os.path.splitext(os.path.basename(xml_file))
+        jpg_file = args.inputDir + 'image/' +name[0]+'.jpg'
 
-        move(xml_file,args.inputDir + 'train/frame'+num+'.xml')
-        move(jpg_file,args.inputDir + 'train/frame'+num+'.jpg')
+        move(xml_file,args.inputDir + 'train/'+name[0]+name[1])
+        move(jpg_file,args.inputDir + 'train/'+name[0]+'.jpg')
 
     print('Successfully transfer %d labeled sets'%len(files))
     #-----------------------------------------------------------
@@ -72,8 +73,8 @@ def main():
     files = glob.glob(args.inputDir + 'image/*.jpg')
     print('%d images has no label'%len(files))
     for file in files:
-        num = re.findall(r'\d+',file)[-1]
-        move(file,args.inputDir + 'train/frame'+num+'.jpg')
+        name = os.path.splitext(os.path.basename(xml_file))
+        move(file,args.inputDir + 'train/' +name[0]+'.jpg')
 
 if __name__ == '__main__':
     main()
