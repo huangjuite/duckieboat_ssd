@@ -35,46 +35,36 @@ def main():
     #-----------------------------------------------------------
     #-----------------------------------------------------------
     files = glob.glob(args.inputDir + 'annotation/*.xml')
-    train_xmls = []
-    test_xmls = []
+    dataset = []
+    dataset.append([])
+    dataset.append([])
+    dataset.append([])
+    dataset.append([])
+    dataset.append([])
+
     for i,xml_file in enumerate(files):
-        if i<len(files)*args.percentage:
-            test_xmls.append(xml_file)
-        else:
-            train_xmls.append(xml_file)
+        dataset[i%5].append(xml_file)
     #-----------------------------------------------------------
     #-----------------------------------------------------------
+    
     try:
-        os.mkdir(args.inputDir+'test')
+        os.mkdir(args.inputDir+'set0')
+        os.mkdir(args.inputDir+'set1')
+        os.mkdir(args.inputDir+'set2')
+        os.mkdir(args.inputDir+'set3')
+        os.mkdir(args.inputDir+'set4')
     except:
         print 'test folder already esxist'
-    for xml_file in test_xmls:
-        name = os.path.splitext(os.path.basename(xml_file))
-        jpg_file = args.inputDir + 'image/' +name[0]+'.jpg'
-        print jpg_file
-        move(xml_file,args.inputDir + 'test/'+name[0]+name[1])
-        move(jpg_file,args.inputDir + 'test/'+name[0]+'.jpg')
+        
+    for set in dataset:
+        for i,xml_file in enumerate(set):
+            name = os.path.splitext(os.path.basename(xml_file))
+            jpg_file = args.inputDir + 'image/' +name[0]+'.jpg'
+            #print jpg_file
+            move(xml_file,args.inputDir + 'set%d/'%(i%5)+name[0]+name[1])
+            move(jpg_file,args.inputDir + 'set%d/'%(i%5)+name[0]+'.jpg')
     #-----------------------------------------------------------
     #-----------------------------------------------------------
-    try:
-        os.mkdir(args.inputDir+'train')
-    except:
-        print 'train folder already esxist'
-    for xml_file in train_xmls:
-        name = os.path.splitext(os.path.basename(xml_file))
-        jpg_file = args.inputDir + 'image/' +name[0]+'.jpg'
-
-        move(xml_file,args.inputDir + 'train/'+name[0]+name[1])
-        move(jpg_file,args.inputDir + 'train/'+name[0]+'.jpg')
-
-    print('Successfully transfer %d labeled sets'%len(files))
-    #-----------------------------------------------------------
-    #-----------------------------------------------------------
-    files = glob.glob(args.inputDir + 'image/*.jpg')
-    print('%d images has no label'%len(files))
-    for file in files:
-        name = os.path.splitext(os.path.basename(xml_file))
-        move(file,args.inputDir + 'train/' +name[0]+'.jpg')
-
+    
 if __name__ == '__main__':
     main()
